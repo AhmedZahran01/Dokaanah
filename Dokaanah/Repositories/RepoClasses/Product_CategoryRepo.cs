@@ -16,8 +16,10 @@ namespace Dokaanah.Repositories.RepoClasses
             return contex10.Product_Categories.Include(p => p.C).Include(p => p.P).ToList();
         }
 
-      
-
-       
+        public int insert(Product_Category Product_Category)
+        {
+            contex10.Add(Product_Category);
+            return contex10.SaveChanges();
+        }
     }
 }

@@ -1,10 +1,13 @@
-﻿@model IEnumerable<Product>
+﻿@model Product
 @{
-    
+
     Layout = "~/Views/Shared/noLayoutView.cshtml";
     var countcustomer = ViewBag.customerCount;
     var Productcount = ViewBag.ProductCount; 
-   
+    var allsummofPrice = ViewBag.AllpriceCount;
+    var allroductForShowIt = ViewBag.Allproducts;
+    var allcategoryNamesForShowIt =(List<Category>) ViewBag.AllcategoryNames;
+
 
 }
 
@@ -42,7 +45,7 @@
                 <li class="breadcrumb-item">
                     <a class="link-body-emphasis fw-semibold text-decoration-none">Dashboard</a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page">
+                <li  class="breadcrumb-item active" aria-current="page">
                     Main Page
                 </li>
             </ol>
@@ -56,7 +59,7 @@
                 <div class="dash-count dash-count-1">
                     <div class="dash-count-number">
                         <h4>Customers</h4>
-                        <p>@countcustomer</p>
+                        <p>@(@countcustomer-1)</p>
                     </div>
                     <div class="dash-img-1">
                         <i class="fa-solid fa-users fa-xl"></i>
@@ -67,7 +70,7 @@
                 <div class="dash-count dash-count-2">
                     <div class="dash-count-number">
                         <h4>Total Earning</h4>
-                        <p>$100</p>
+                        <p> @allsummofPrice</p>
                     </div>
                     <div class="dash-img-2">
                         <i class="fa-solid fa-sack-dollar fa-xl" style="color: #ff6600;"></i>
@@ -105,46 +108,51 @@
                     <th scope="col">Image</th>
                     <th scope="col">Price</th>
                     <th scope="col">Quantity</th>
-                    <th scope="col">Stock</th>
+                    @* <th scope="col">Stock</th> *@
                     <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model ) {
+                @foreach (var item in allroductForShowIt ) {
                     <tr class="align-middle">
                         <td>@item.Id</td>
                         <td> <strong>@item.Name</strong></td>
                         <td><img src="@item.ImgUrl" alt="Product Image" class="rounded-circle rounded-circle-dash"></td>
                         <td>@item.Price</td>
 
-                        <td>@item.Quantity</td>
+                        <td>@(item.Quantity ?? 0)</td>
                         <td>
-                            <span class="badge badge-dashboard rounded-pill bg-info in-stock ">In Stock</span>
-                            <span class="badge badge-dashboard rounded-pill bg-danger outof-stock d-none">OUt of Stock</span>
+                            @if (item.Quantity != null && item.Quantity > 0)
+                            {
+                                <span class="badge badge-dashboard rounded-pill bg-info in-stock">In Stock</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-dashboard rounded-pill bg-danger outof-stock">Out of Stock</span>
+                            }
                         </td>
 
+                        @*                                     arial-label="Edit" data-bs-toggle="modal"
+                    data-bs-target="#editProductModal" *@
+
                         <td>
-                            <button class="btn btn-primary btn-sm me-2 edit-btn" arial-label="Edit" data-bs-toggle="modal" data-bs-target="#editProductModal"><i class="fas fa-edit"></i></button>
-                            <button class="btn btn-danger btn-sm delete-btn" aria-label="Delete"><i class="fas fa-trash"></i></button>
+                           @*  <a asp-controller="Product" asp-action="Edit"
+
+                            class="btn btn-primary btn-sm me-2 edit-btn">
+                            <i class="fas fa-edit"></i>
+
+                                </a> *@
+                            <a class="btn btn-primary btn-sm me-2 edit-btn"
+                               asp-controller="Product" asp-action="Edit" asp-route-id="@item.Id">
+                                 <i class="fas fa-edit"></i>
+                            </a>
+                            <a asp-controller="Product"  asp-action="delete" asp-route-id="@item.Id" 
+                            class="btn btn-danger btn-sm delete-btn" aria-label="Delete">
+                            <i class="fas fa-trash"></i></a>
                         </td>
                     </tr>
                 }
-                @*                 <tr class="align-middle">
-                    <td>1</td>
-                    <td> <strong>T-shirt</strong></td>
-                    <td><img src="images/General/profile.png" alt="Product Image" class="rounded-circle rounded-circle-dash "></td>
-                    <td>$19.99</td>
-                    <td>20 Item</td>
-                    <td>
-                        <span class="badge badge-dashboard rounded-pill bg-info in-stock ">In Stock</span>
-                        <span class="badge badge-dashboard rounded-pill bg-danger outof-stock d-none">OUt of Stock</span>
-                    </td>
-                    <td>
-                        <button class="btn btn-primary btn-sm me-2 edit-btn" data-bs-toggle="modal" data-bs-target="#editProductModal"><i class="fas fa-edit"></i></button>
-                        <button class="btn btn-danger btn-sm delete-btn"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr> *@
-
+               
             </tbody>
         </table>
     </div>
@@ -158,25 +166,41 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form asp-controller="Products" asp-action="Create" method="post" id="addProductForm">
+                    <form asp-controller="Product" asp-action="Create" method="post" id="addProductForm">
                         <div class="mb-3">
                             <label for="productName" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="productName">
+                            <input name="Name" type="text" class="form-control" id="productName">
                         </div>
                         <div class="mb-3">
                             <label for="productPrice" class="form-label">Price</label>
-                            <input type="number" class="form-control" id="productPrice">
+                            <input name="Price" type="number" class="form-control" id="productPrice">
                         </div>
                         <div class="mb-3">
-                            <label for="productImage" class="form-label">Image</label>
-                            <input type="text" class="form-control" id="productImage">
+                            <label for="productImage" class="form-label">Image Url</label>
+                            <input name="ImgUrl" type="text" class="form-control" id="productImage">
                         </div>
-                        <div class="form-floating">
-                            <textarea class="form-control" placeholder="Enter Product Description" id="floatingTextarea"></textarea>
-                            <label for="floatingTextarea">Description</label>
+                        <div class="mb-3">
+                            <label for="Description" class="form-label"> Description </label>
+                            <input name="Description" type="text" class="form-control" id="productImage">
+                        </div>
+                        <div class="mb-3">
+                            <label for="Quantity" class="form-label"> Quantity </label>
+                            <input name="Quantity" type="text" class="form-control" id="productImage">
                         </div>
 
-                        <input value="Add Product" type="submit" class="btn btn-primary">
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Category Name</label>
+                            <select name="category" class="form-control" id="category">
+                                <option value="">Select a category</option>
+                                @foreach (var item in allcategoryNamesForShowIt)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            </select>
+                        </div>
+
+
+                        <input type="submit" value="Add Product" class="btn btn-dark w-100 mb-3">
 
                     </form>
                 </div>
@@ -192,17 +216,57 @@
     <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editProductModalLabel">Edit Product</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
                 <div class="modal-body">
-                    <form id="editProductForm">
+
+                       <form asp-controller="product" asp-action="Edit">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <div class="form-group">
+                            <label asp-for="Name" class="control-label"></label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Price" class="control-label"></label>
+                            <input asp-for="Price" class="form-control" />
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Description" class="control-label"></label>
+                            <input type="hidden" asp-for="Description" class="form-control" />
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ImgUrl" class="control-label"></label>
+                            <input asp-for="ImgUrl" class="form-control" />
+                            <span asp-validation-for="ImgUrl" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Quantity" class="control-label"></label>
+                            <input asp-for="Quantity" class="form-control" />
+                            <span asp-validation-for="Quantity" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Sellerid" class="control-label"></label>
+                            <select asp-for="Sellerid" class="form-control" asp-items="ViewBag.Sellerid"></select>
+                            <span asp-validation-for="Sellerid" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Orderid" class="control-label"></label>
+                            <select asp-for="Orderid" class="form-control" asp-items="ViewBag.Orderid"></select>
+                            <span asp-validation-for="Orderid" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Save" class="btn btn-primary" />
+                        </div>
+                    </form>
+                  @*   <form asp-controller="product" asp-action="Edit" id="editProductForm">
                         <div class="mb-3">
                             <label for="editProductName" class="form-label">Name</label>
                             <input type="text" class="form-control" id="editProductName">
                         </div>
-                        <div class="mb-3">
+                       
+                        @* <div class="mb-3">
                             <label for="editProductPrice" class="form-label">Price</label>
                             <input type="number" class="form-control" id="editProductPrice">
                         </div>
@@ -214,12 +278,24 @@
                             <textarea class="form-control" placeholder="Enter Product Description" id="floatingTextarea"></textarea>
                             <label for="floatingTextarea">Description</label>
                         </div>
-                    </form>
+ *@@* 
+                        <input type="submit" value="Edit Product" class="btn btn-dark w-100 mb-3">
+
+
+                    </form> *@ 
+
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" aria-label="Close" data-bs-dismiss="modal">Close</button>
+                   @*  <button type="button" class="btn btn-secondary" aria-label="Close" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" aria-label="Update" onclick="updateProduct()">Update Product</button>
+                *@
+                    @* <div class="modal-header">
+                    <h5 class="modal-title" id="editProductModalLabel">Edit Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div> *@
                 </div>
+
+
             </div>
         </div>
     </div>
@@ -232,13 +308,13 @@
         function updateProduct() {
         }
 
-        document.addEventListener('click', function (event) {
-            if (event.target.classList.contains('delete-btn')) {
-                if (confirm('Are you sure you want to delete this product?')) {
-                    event.target.closest('tr').remove();
-                }
-            }
-        });
+        // document.addEventListener('click', function (event) {
+        //     if (event.target.classList.contains('delete-btn')) {
+        //         if (confirm('Are you sure you want to delete this product?')) {
+        //             event.target.closest('tr').remove();
+        //         }
+        //     }
+        // });
 
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
