@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dokaanah.Migrations
 {
     [DbContext(typeof(Dokkanah2Contex))]
-    [Migration("20240514013629_int3c")]
-    partial class int3c
+    [Migration("20240514162312_ss1s")]
+    partial class ss1s
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

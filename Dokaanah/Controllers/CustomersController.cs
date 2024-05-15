@@ -104,6 +104,7 @@ namespace Dokaanah.Controllers
         
         public async Task<IActionResult> Login(signinviewmodel models)
         {
+            
             if (ModelState.IsValid)
             {
 
@@ -118,6 +119,12 @@ namespace Dokaanah.Controllers
 
                         if (result.Succeeded)
                         {
+                            if(User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                            {
+                                return RedirectToAction(nameof(AdminDashboardController.Index), "AdminDashboard");
+
+                            }
+
                             return RedirectToAction(nameof(HomeController.Index), "Home");
                         }
 
@@ -130,6 +137,7 @@ namespace Dokaanah.Controllers
            return RedirectToAction(nameof(HomeController.Index), "Home");
 
         }
+
 
         public async Task<IActionResult> SignOut(SignUpViewModels models)
         {

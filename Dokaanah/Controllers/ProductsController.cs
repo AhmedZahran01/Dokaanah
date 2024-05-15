@@ -70,5 +70,42 @@ namespace Dokaanah.Controllers
             // Pass the filtered products to the view
             return View(products);
         }
+
+
+
+
+        #region a.saeed Create product
+
+        // GET: Products/Create
+        public IActionResult Create()
+        {
+            //ViewData["Orderid"] = new SelectList(ordersRepo1.GetAll(), "Id", "Id");
+            //ViewData["Sellerid"] = new SelectList(sellersRepo1.GetAll(), "Id", "Id");
+            return View();
+        }
+
+        // POST: Products/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Name,Price,Description,ImgUrl,Quantity,Sellerid,Orderid")] Product product)
+        {
+            if (ModelState.IsValid)
+            {
+                _productRepo.insert(product);
+                return RedirectToAction(nameof(AdminDashboardController.Index) , "AdminDashboard");
+            }
+            //ViewData["Orderid"] = new SelectList(ordersRepo1.GetAll(), "Id", "Id", product.Orderid);
+            //ViewData["Sellerid"] = new SelectList(sellersRepo1.GetAll(), "Id", "Id", product.Sellerid);
+            return View(product);
+        }
+
+
+
+
+
+
+        #endregion
     }
 }

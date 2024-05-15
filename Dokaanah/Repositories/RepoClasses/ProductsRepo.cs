@@ -54,10 +54,10 @@ namespace Dokaanah.Repositories.RepoClasses
         //    contex10 = c1ontex10;
         //}
 
-        //public IEnumerable<Product> GetAll()
-        //{
-        //    return contex10.Products.Include(p => p.Order).Include(p => p.Seller).ToList();
-        //}
+        public IEnumerable<Product> GetAll()
+        {
+            return _context.Products.Include(p => p.Order).Include(p => p.Seller).ToList();
+        }
 
         //// For ProductViewModel
         //public IEnumerable<Product> GetGetPrdCat()
@@ -83,12 +83,12 @@ namespace Dokaanah.Repositories.RepoClasses
 
 
 
-        //public int insert(Product Product)
-        //{
-        //    contex10.Add(Product);
-        //    return contex10.SaveChanges();
+        public int insert(Product Product)
+        {
+            _context.Add(Product);
+            return _context.SaveChanges();
 
-        //}
+        }
 
         //public int update(Product Product)
         //{

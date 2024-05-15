@@ -16,7 +16,7 @@ namespace Dokaanah.ViewModels
 		[MinLength(5,ErrorMessage = "minmum Password is Required")]
 		[DataType(DataType.Password)]
 		public string Password { get; set; }
-
+		//
 		[Required(ErrorMessage = "confirm Password is Required")]
 		[Compare(nameof(Password) ,ErrorMessage = "confirm Password does not match Password")]
 		[DataType(DataType.Password)]

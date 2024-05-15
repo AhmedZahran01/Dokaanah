@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Dokaanah.Migrations
 {
     /// <inheritdoc />
-    public partial class int1c : Migration
+    public partial class ss1s : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

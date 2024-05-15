@@ -44,7 +44,7 @@ namespace Dokaanah.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.
-        UseSqlServer("Server=DESKTOP-0HPU58A\\SQLEXPRESS;Database=DokkanahDataBase_2ff;Encrypt=false;Trusted_Connection=True;TrustServerCertificate=True");
+        UseSqlServer("Server=DESKTOP-0HPU58A\\SQLEXPRESS;Database=DokkanahDataBase_2fff;Encrypt=false;Trusted_Connection=True;TrustServerCertificate=True");
 
 
 

@@ -16,12 +16,15 @@ namespace Dokaanah.Repositories.RepoInterfaces
 
 
         List<Product> GetProductsWithItsCategories();
+        
+        
+        public IEnumerable<Product> GetAll();
+        public int insert(Product product);
 
 
 
 
 
-        //public IEnumerable<Product> GetAll();
 
         //public IEnumerable<Product> GetPrdCat();
         //public IQueryable<Product> SearchByName(string Name);
@@ -29,7 +32,6 @@ namespace Dokaanah.Repositories.RepoInterfaces
         //public IEnumerable<Product> GetTopRate();
         //public List<string> GetAllImgURL();
         //public Product GetById(int id); 
-        //public int insert(Product product);
         //public int update(Product product);
         //public int delete(Product product);
 

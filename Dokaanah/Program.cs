@@ -17,7 +17,7 @@ namespace Dokaanah
             builder.Services.AddDbContext<Dokkanah2Contex>(options =>
             {
                 options.
-                UseSqlServer("Server=DESKTOP-0HPU58A\\SQLEXPRESS;Database=DokkanahDataBase_2ff;Encrypt=false;Trusted_Connection=True; TrustServerCertificate=True");
+                UseSqlServer("Server=DESKTOP-0HPU58A\\SQLEXPRESS;Database=DokkanahDataBase_2fff;Encrypt=false;Trusted_Connection=True; TrustServerCertificate=True");
             });
             builder.Services.AddScoped<ICartRepo, CartRepo>();
             builder.Services.AddScoped<IProductsRepo, ProductsRepo>();
