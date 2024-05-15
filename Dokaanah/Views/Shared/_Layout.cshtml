@@ -64,6 +64,14 @@
                             <li class="nav-item">
                                 <a class="nav-link" asp-controller="Home" asp-action="contantUs">Contact</a>
                             </li>
+                          @if(User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                          {
+                             <li class="nav-item">
+                                    <a class="nav-link" asp-controller="AdminDashboard" asp-action="Index">Admin Dashbord</a>
+
+                             </li>
+                          }
+
                         </ul>
 
                         <ul class="navbar-nav">

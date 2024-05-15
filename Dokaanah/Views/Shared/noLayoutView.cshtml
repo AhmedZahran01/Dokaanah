@@ -18,7 +18,33 @@
 
 <body>
 
+    <!-- nav -->
+    <header>
+        <nav class="navbar bg-body-tertiary">
+            <div class="container dashboard-navb">
+                <a class="navbar-brand">
+                    <i class="fa-solid fa-user-check fa-xl" style="color: #f85e2a;"></i>
+                </a>
+                <div class="nav-item">
+                    <a asp-controller="Home" asp-action="Index" style="color: #045F5F;"> Home </a>
+                </div>
+               
+                <div class="nav-item">
+                    <h3>Dokkanah</h3>
+                </div>
 
+               
+
+                <div class="nav-item">
+                    <a asp-controller="Customers" asp-action="SignOut">Log Out</a>
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </div>
+
+
+            </div>
+        </nav>
+    </header>
+  
 
     @* ======================================================================================= *@
     <div>

@@ -21,9 +21,11 @@ namespace Dokaanah.Controllers
             this.customersRepo=customersRepo;
             this.categoriesRepo=categoriesRepo;
             this.productsRepo=productsRepo;
-        } 
-       
+        }
+
         #endregion
+       
+        //AdminDashboard
         public IActionResult Index()
         {
             ViewBag.customerCount = customersRepo.GetAll().Count();
