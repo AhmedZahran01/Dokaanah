@@ -200,8 +200,10 @@
                 <div class="modal-body">
 
                        <form asp-controller="product" asp-action="Edit">
+                           @* @ViewBag.AllcategoryNames = @allcategoryNamesForShowIt;  *@
                         <div asp-validation-summary="All" class="text-danger"></div>
                         <input type="hidden" asp-for="Id" />
+                       
                         <div class="form-group">
                             <label asp-for="Name" class="control-label"></label>
                             <input asp-for="Name" class="form-control" />
@@ -240,6 +242,7 @@
                         <div class="form-group">
                             <input type="submit" value="Save" class="btn btn-primary" />
                         </div>
+                    
                     </form>
                   @*   <form asp-controller="product" asp-action="Edit" id="editProductForm">
                         <div class="mb-3">

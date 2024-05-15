@@ -28,11 +28,17 @@ namespace Dokaanah.Controllers
         //AdminDashboard
         public IActionResult Index()
         {
+            #region view bag data 
+           
+            
             ViewBag.customerCount = customersRepo.GetAll().Count();
             ViewBag.ProductCount = productsRepo.GetAll().Count();
             ViewBag.AllpriceCount = productsRepo.GetAll().Sum(e => e.Price);
             ViewBag.Allproducts = productsRepo.GetAll();
-            ViewBag.AllcategoryNames = categoriesRepo.GetAll();
+            ViewBag.AllcategoryNames = categoriesRepo.GetAll(); 
+            
+            #endregion
+
 
             return View();
         }

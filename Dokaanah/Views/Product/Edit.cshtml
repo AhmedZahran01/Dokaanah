@@ -3,8 +3,8 @@
 @{
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/noLayoutView.cshtml";
-     // var allcategoryNamesForShowIt =(List<Category>) ViewBag.AllcategoryNames;
 
+    //var allcategoryNamesForShowIt =(List<Category>) ViewBag.AllcategoryNames;
 
 }
 
@@ -86,19 +86,8 @@
                         <input asp-for="Quantity" class="form-control" />
                         <span asp-validation-for="Quantity" class="text-danger"></span>
                     </div>
-                    @* <div class="form-group">
-                        <label asp-for="Sellerid" class="control-label"></label>
-                        <select asp-for="Sellerid" class="form-control" asp-items="ViewBag.Sellerid"></select>
-                        <span asp-validation-for="Sellerid" class="text-danger"></span>
-                    </div> *@
-                   @*  <div class="form-group">
-                        <label asp-for="Orderid" class="control-label"></label>
-                        <select asp-for="Orderid" class="form-control" asp-items="ViewBag.Orderid"></select>
-                        <span asp-validation-for="Orderid" class="text-danger"></span>
-                    </div> *@
 
-
-                    @* <div class="mb-3">
+                   @*  <div class="mb-3">
                         <label for="category" class="form-label">Category Name</label>
                         <select name="category" class="form-control" id="category">
                             <option value="">Select a category</option>
@@ -107,8 +96,7 @@
                                 <option value="@item.Id">@item.Name</option>
                             }
                         </select>
-                    </div>
- *@
+                    </div> *@
 
                     <div class="form-group">
                         <input type="submit" value="Save" class="btn btn-primary" />
