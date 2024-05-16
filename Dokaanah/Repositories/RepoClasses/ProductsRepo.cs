@@ -84,11 +84,11 @@ namespace Dokaanah.Repositories.RepoClasses
 
 
 
-        //public IQueryable<Product> SearchByName(string name)
-        //{
-        //    return contex10.Products.Where(p => p.Name.ToLower().Contains(name));
+        public IQueryable<Product> SearchByName(string name)
+        {
+            return _context.Products.Where(p => p.Name.ToLower().Contains(name));
 
-        //}
+        }
 
         //public IQueryable<Product> SearchByPrice( float startRange, float endRange)
         //{

@@ -27,14 +27,32 @@ namespace Dokaanah.Controllers
             return View(randomProducts);
         }
 
-        public IActionResult Shop(string catName)
+        public IActionResult Shop(string catName , string productName)
         {
-            var allproductsWithCats = product_CategoryRepo.GetAll();
-            var allcategories = categoriesRepo.GetAll().ToList();
-            ViewBag.cats = allcategories;
-            catName  = string.IsNullOrEmpty(catName) ? "all" : catName;
-            ViewData["catName"] = catName;
-            return View(allproductsWithCats);
+            if (string.IsNullOrEmpty(productName))
+            {
+
+                var allproductsWithCats = product_CategoryRepo.GetAll();
+                var allcategories = categoriesRepo.GetAll().ToList();
+                ViewBag.cats = allcategories;
+                catName  = string.IsNullOrEmpty(catName) ? "all" : catName;
+                ViewData["catName"] = catName;
+                ViewBag.allproducts = productsRepo.GetAll().ToList();
+                return View(allproductsWithCats);
+            }
+            else 
+            {
+                var allproductsWithCats = product_CategoryRepo.GetAll();
+                var allcategories = categoriesRepo.GetAll().ToList();
+                ViewBag.cats = allcategories;
+                catName  = string.IsNullOrEmpty(catName) ? "all" : catName;
+                ViewData["catName"] = catName;
+
+                ViewBag.allproducts = productsRepo.SearchByName(productName).ToList();
+                return View(allproductsWithCats);
+            }
+
+
         }
         public IActionResult aboutUs()
         {
@@ -57,6 +75,10 @@ namespace Dokaanah.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        public IActionResult ErrorHandleForUser()
+        {
+            return View();
+        }
         public IActionResult FAQ()
         {
             return View();

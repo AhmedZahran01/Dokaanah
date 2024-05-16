@@ -22,6 +22,7 @@ namespace Dokaanah.Repositories.RepoInterfaces
         public int insert(Product product);
         public int update(Product product);
         public int delete(Product product);
+        public IQueryable<Product> SearchByName(string Name);
 
 
 
@@ -30,7 +31,6 @@ namespace Dokaanah.Repositories.RepoInterfaces
 
 
         //public IEnumerable<Product> GetPrdCat();
-        //public IQueryable<Product> SearchByName(string Name);
         //public IQueryable<Product> SearchByPrice(float startRange, float endRange);
         //public IEnumerable<Product> GetTopRate();
         //public List<string> GetAllImgURL();

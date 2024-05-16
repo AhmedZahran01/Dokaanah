@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
+
 <html lang="en">
 @* @{
     var detailsOfUser =(signinviewmodel) ViewBag.mo;
@@ -92,15 +94,15 @@
                                 </li>
                             }
                             <li class="nav-item d-none d-lg-block d-xl-block me-lg-3">
-                                <button type="button" class="btn position-relative" onclick="open_cart()" aria-label="cart open">
+                                <a class="btn position-relative" asp-controller="CartProduct" asp-action="viewcart" aria-label="cart open">
                                     <i class="fas fa-shopping-cart "></i>
-                                    <span class="position-absolute top-0 start-100 translate-middle badge bg-danger"
-                                          id="cartItemCount">0</span>
-                                </button>
+                                    @* <span class="position-absolute top-0 start-100 translate-middle badge bg-danger"
+                                          id="cartItemCount">0</span> *@
+                                </a>
                             </li>
 
                             <li class="nav-item">
-                                <button id="searchIcon" class="btn" aria-label="Search Button">
+                                <button asp-controller="home" asp-action="shop" name="productName" id="searchIcon" class="btn" aria-label="Search Button">
                                     <i class="fas fa-search"></i>
                                 </button>
                             </li>
@@ -128,11 +130,11 @@
             <div class="container-fluid">
                 <div class="row justify-content-between">
                     <div class="col-4 text-center">
-                        <button type="button" class="btn position-relative" onclick="open_cart()">
+                        <a type="button" class="btn position-relative" asp-controller="CartProduct" asp-action="viewcart">
                             <i class="fas fa-shopping-cart" aria-label="Open Cart"></i>
-                            <span class="position-absolute top-0 start-100 translate-middle badge bg-danger"
-                                  id="cartItemCount_bottom">0</span>
-                        </button>
+                           @*  <span class="position-absolute top-0 start-100 translate-middle badge bg-danger"
+                                  id="cartItemCount_bottom">0</span> *@
+                        </a>
                     </div>
                     <div class="col-4 text-center login_icon_user">
                         <button class="btn" type="button" aria-label="login-register_">
@@ -140,7 +142,7 @@
                         </button>
                     </div>
                     <div class="col-4 text-center shop_icon_bottom">
-                        <a href="shop.html" class="btn"> <i class="fa-solid fa-shop"></i></a>
+                        <a asp-controller="Home" asp-action="Shop" class="btn"> <i class="fa-solid fa-shop"></i></a>
                     </div>
 
                 </div>
@@ -155,8 +157,8 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form class="search-form ">
-                            <input type="text" class="form-control" placeholder="Search...">
+                        <form asp-controller="home" asp-action="shop" class="search-form ">
+                            <input name="productName" type="text" class="form-control" placeholder="Search...">
                             <button type="submit" class="btn btn-danger mt-2 ms-auto w-100" aria-label="Search Open">Search</button>
                         </form>
                     </div>

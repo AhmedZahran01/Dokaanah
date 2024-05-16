@@ -5,6 +5,8 @@
 @model List<Product_Category> ;
 @{
     string currentCategory = ViewData["catName"]?.ToString() ?? "all";
+
+    var listpro = (List<Product>) ViewBag.allproducts;
 }
 
     <!-- =====================================[BreadCrumb Section]======================================================= -->
@@ -46,25 +48,27 @@
                 </div>
 
             <div class="row filter-items">
-                @foreach (var prodCt in Model)
+                @foreach (var prodCt in listpro)
                 {
-                <div class="col-sm-12 col-md-6 col-lg-4 filter-item all @(prodCt.C.Name.Trim().ToLower())" data-price="@prodCt.P.Price">
+                <div class="col-sm-12 col-md-6 col-lg-4 filter-item all @(prodCt.Name.Trim().ToLower())" data-price="@prodCt.Price">
                         <div class="shopCentre">
                             <div class="product-item hover-effect-slide">
                                 <div class="image-holder position-relative">
-                                    <img src="@prodCt.P.ImgUrl" alt="@prodCt.P.Name" class="product-image img-fluid">
-                                    <a asp-controller="Product" asp-action="Details" asp-route-id="@prodCt.P.Id" class="btn-icon btn-eye-con">
+                                    <img src="@prodCt.ImgUrl" alt="@prodCt.Name" class="product-image img-fluid">
+                                    <a asp-controller="Product" asp-action="Details" asp-route-id="@prodCt.Id" class="btn-icon btn-eye-con">
                                         <i class="fa fa-eye"></i>
                                     </a>
+                                <a asp-controller="CartProduct" asp-action="AddProductToCart" asp-route-id="@prodCt.Id">
                                     <span class="btn btn-dark w-100 mt-2 rounded-3 add-cart-btnnn">Add to cart</span>
+                                </a>
                                 </div>
                                 <div class="product-content position-relative">
                                     <h5 class="product-name text-uppercase fs-5 mt-3">
-                                        <a asp-controller="Product" asp-action="Details" asp-route-id="@prodCt.P.Id">@prodCt.P.Name</a>
+                                        <a asp-controller="Product" asp-action="Details" asp-route-id="@prodCt.Id">@prodCt.Name</a>
                                     </h5>
                                     <div class="product-price">
-                                        <span class="new-price">$@prodCt.P.Price</span>
-                                        <span class="old-price">$@((prodCt.P.Price) * (1.75))</span>
+                                        <span class="new-price">$@prodCt.Price</span>
+                                        <span class="old-price">$@((prodCt.Price) * (1.75))</span>
                                     </div>
                                     <div class="product-star">
                                         <i class="fa fa-star"></i>

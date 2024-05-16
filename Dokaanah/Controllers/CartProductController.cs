@@ -43,6 +43,7 @@ namespace Dokaanah.Controllers
         }
 
         [HttpGet]
+        
         public IActionResult ViewCart()
         {
             var cartitems = HttpContext.Session.Get<List<ShoppingCartItem>>("Cart") ?? new List<ShoppingCartItem>();
@@ -109,6 +110,14 @@ namespace Dokaanah.Controllers
 
         public IActionResult paymientAction()
         {
+            var cartitems = HttpContext.Session.Get<List<ShoppingCartItem>>("Cart") ?? new List<ShoppingCartItem>();
+
+            var cartitemviewmodel = new shoppingCartViewModel
+            {
+                CartItems = cartitems,
+                TotalPrice = cartitems.Sum(item => item.Product.Price * item.Quantity)
+            };
+            ViewBag.totalprice = cartitemviewmodel.TotalPrice;
             return View();  
         }
 

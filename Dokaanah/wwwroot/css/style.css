@@ -200,6 +200,7 @@ p {
     border-left: 1px solid var(--border-color);
     z-index: -100;
     transition: 0.5s ease;
+    display:none;
 }
 
 .cart.active {
