@@ -7,7 +7,7 @@ using NuGet.Protocol.Core.Types;
 
 namespace Dokaanah.Controllers
 {
-
+    //CartProduct
     public class CartProductController : Controller
     {
         private readonly ICartProductRepo _cartproductRepo;
@@ -151,6 +151,27 @@ namespace Dokaanah.Controllers
                 // Handle exception
                 return StatusCode(500, "An error occurred while updating the cart product quantity.");
             }
+        }
+
+
+        public IActionResult paymientAction()
+        {
+            var cartitems = HttpContext.Session.Get<List<ShoppingCartitem>>("Cart").ToList(); // ?? new List<ShoppingCartitem>();
+
+            var cartitemviewmodel = new shoppingCartViewModel
+            {
+                CartItems = cartitems.Select(e => e.product).ToList(),
+                TotalPrice = cartitems.Sum(item => item.product.Price * item.Quantity)
+            };
+            ViewBag.totalprice = cartitemviewmodel.TotalPrice;
+            return View();
+        }
+
+
+        public IActionResult paymientsucces()
+        {
+            
+            return View();
         }
 
     }
