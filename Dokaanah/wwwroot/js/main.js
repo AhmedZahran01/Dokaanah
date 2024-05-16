@@ -54,7 +54,6 @@ addToCartButtons.forEach(button => {
   button.addEventListener('click', addToCart);
 });
 
-
 function addToCart(event) {
   let productCard = event.target.closest('.product-item');
   let productName = productCard.querySelector('.product-name a').textContent;

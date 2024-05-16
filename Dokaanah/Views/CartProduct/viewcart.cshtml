@@ -1,0 +1,154 @@
+﻿@model Dokaanah.ViewModels.shoppingCartViewModel
+
+<style>
+    /* Magic Button CSS */
+    .magic-button {
+        position: relative;
+        overflow: hidden;
+        color: #fff;
+        background-color: #ff4d4d;
+        border: none;
+        border-radius: 50px;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: uppercase;
+        transition: all 0.4s ease;
+        cursor: pointer;
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    }
+
+        .magic-button:hover {
+            background-color: #ff6666;
+            box-shadow: 0 15px 20px rgba(0, 0, 0, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .magic-button:before, .magic-button:after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: rgba(255, 255, 255, 0.2);
+            z-index: 1;
+            transition: all 0.4s ease;
+            opacity: 0;
+        }
+
+        .magic-button:before {
+            transform: translateX(-100%) skewX(-15deg);
+        }
+
+        .magic-button:after {
+            transform: translateX(100%) skewX(15deg);
+        }
+
+        .magic-button:hover:before, .magic-button:hover:after {
+            transform: translateX(0) skewX(0);
+            opacity: 1;
+        }
+
+        .magic-button span {
+            position: relative;
+            z-index: 2;
+        }
+
+</style>
+
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <div class="table-cart ">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Products</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.CartItems)
+                    {
+                        <tr>
+
+                            <th scope="row">
+                                <div class="d-flex align-items-center">
+                                    <img src="@item.ImgUrl" class="img-fluid me-5 rounded-circle"
+                                         style="width: 80px; height: 80px;" alt="">
+                                </div>
+                            </th>
+                            <td>
+                                <p class="mb-0 mt-4">@item.Name</p>
+                            </td>
+                            <td>
+                                <p class="mb-0 mt-4">$ @item.Price </p>
+                            </td>
+                            <td>
+                                <div class="input-group quantity mt-4" style="width: 100px;">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-sm btn-minus rounded-circle bg-light border"
+                                                aria-label="Minus">
+                                            <i class="fa fa-minus"></i>
+                                        </button>
+                                    </div>
+                                    <input name="Quantity" type="text" class="form-control form-control-sm text-center border-0"
+                                           value="1">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-sm btn-plus rounded-circle bg-light border"
+                                                aria-label="Plus">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <p class="mb-0 mt-4">$@((item.Price * item.Quantity)))  </p>
+                            </td>
+                            <td>
+                                <button class="btn btn-md   mt-4" aria-label="delete product">
+                                    <i class="fa-solid fa-circle-minus fa-xl"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="d-flex justify-content-between align-items-center maxWidthButtons">
+            <a asp-controller="Home" asp-action="Shop" class="btn btn-dark text-nowrap cart-go-shopping-page" role="button">
+                <i class="fa-regular fa-circle-left pe-1"></i>
+                Continue Shopping
+            </a>
+            <button class="btn btn-dark text-nowrap cart-go-shopping-page " aria-label="Delete All">
+                <i class="fa-solid fa-trash pe-1"></i>
+                Delete All
+            </button>
+            <div class="cart-totalprice-page d-flex align-items-center">
+                <p>Total Price : <strong>$@Model.TotalPrice?.ToString("C")</strong></p>
+            </div>
+        </div>
+        <hr>
+        <div class="d-grid col-6 mx-auto">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a asp-controller="CartProduct" asp-action="checkout" class="go-check-out-btn btn btn-danger text-nowrap">
+                    Checkout
+                </a>
+            }
+            else
+            {
+                <a onclick="alert('You must log in or register, please')" asp-controller="Home" asp-action="index" class="go-check-out-btn btn btn-danger text-nowrap magic-button">
+                    <span>Checkout</span>
+
+                </a>
+
+            }
+
+        </div>
+    </div>
+</div>
