@@ -1,62 +1,5 @@
 ﻿@model Dokaanah.ViewModels.shoppingCartViewModel
 
-<style>
-    /* Magic Button CSS */
-    .magic-button {
-        position: relative;
-        overflow: hidden;
-        color: #fff;
-        background-color: #ff4d4d;
-        border: none;
-        border-radius: 50px;
-        padding: 10px 20px;
-        font-size: 16px;
-        font-weight: bold;
-        text-transform: uppercase;
-        transition: all 0.4s ease;
-        cursor: pointer;
-        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-    }
-
-        .magic-button:hover {
-            background-color: #ff6666;
-            box-shadow: 0 15px 20px rgba(0, 0, 0, 0.3);
-            transform: translateY(-3px);
-        }
-
-        .magic-button:before, .magic-button:after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            background: rgba(255, 255, 255, 0.2);
-            z-index: 1;
-            transition: all 0.4s ease;
-            opacity: 0;
-        }
-
-        .magic-button:before {
-            transform: translateX(-100%) skewX(-15deg);
-        }
-
-        .magic-button:after {
-            transform: translateX(100%) skewX(15deg);
-        }
-
-        .magic-button:hover:before, .magic-button:hover:after {
-            transform: translateX(0) skewX(0);
-            opacity: 1;
-        }
-
-        .magic-button span {
-            position: relative;
-            z-index: 2;
-        }
-
-</style>
-
 <div class="container-fluid py-5">
     <div class="container py-5">
         <div class="table-cart ">
@@ -71,46 +14,41 @@
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="cart-items">
                     @foreach (var item in Model.CartItems)
                     {
-                        <tr>
-
+                        <tr data-product-id="@item.Product.Id">
                             <th scope="row">
                                 <div class="d-flex align-items-center">
-                                    <img src="@item.ImgUrl" class="img-fluid me-5 rounded-circle"
-                                         style="width: 80px; height: 80px;" alt="">
+                                    <img src="@item.Product.ImgUrl" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
                                 </div>
                             </th>
                             <td>
-                                <p class="mb-0 mt-4">@item.Name</p>
+                                <p class="mb-0 mt-4">@item.Product.Name</p>
                             </td>
                             <td>
-                                <p class="mb-0 mt-4">$ @item.Price </p>
+                                <p class="mb-0 mt-4">$ @item.Product.Price</p>
                             </td>
                             <td>
                                 <div class="input-group quantity mt-4" style="width: 100px;">
                                     <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-minus rounded-circle bg-light border"
-                                                aria-label="Minus">
+                                        <button class="btn btn-sm btn-minus rounded-circle bg-light border" aria-label="Minus">
                                             <i class="fa fa-minus"></i>
                                         </button>
                                     </div>
-                                    <input name="Quantity" type="text" class="form-control form-control-sm text-center border-0"
-                                           value="1">
+                                    <input name="Quantity" type="text" class="form-control form-control-sm text-center border-0" value="@item.Quantity" readonly>
                                     <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-plus rounded-circle bg-light border"
-                                                aria-label="Plus">
+                                        <button class="btn btn-sm btn-plus rounded-circle bg-light border" aria-label="Plus">
                                             <i class="fa fa-plus"></i>
                                         </button>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <p class="mb-0 mt-4">$@((item.Price * item.Quantity)))  </p>
+                                <p class="mb-0 mt-4 item-total-price">$@(item.Product.Price * item.Quantity)</p>
                             </td>
                             <td>
-                                <button class="btn btn-md   mt-4" aria-label="delete product">
+                                <button class="btn btn-md mt-4 btn-delete" aria-label="delete product">
                                     <i class="fa-solid fa-circle-minus fa-xl"></i>
                                 </button>
                             </td>
@@ -124,15 +62,18 @@
                 <i class="fa-regular fa-circle-left pe-1"></i>
                 Continue Shopping
             </a>
-            <button class="btn btn-dark text-nowrap cart-go-shopping-page " aria-label="Delete All">
-                <i class="fa-solid fa-trash pe-1"></i>
-                Delete All
-            </button>
+            @*      <button class="btn btn-dark text-nowrap cart-go-shopping-page" aria-label="Delete All">
+            <i class="fa-solid fa-trash pe-1"></i>
+            Delete All
+            </button> *@
+
+
             <div class="cart-totalprice-page d-flex align-items-center">
-                <p>Total Price : <strong>$@Model.TotalPrice?.ToString("C")</strong></p>
+                <p>Total Price: <strong id="total-price">$@Model.TotalPrice?.ToString("F2")</strong></p>
             </div>
         </div>
         <hr>
+
         <div class="d-grid col-6 mx-auto">
             @if (User.Identity.IsAuthenticated)
             {
@@ -151,3 +92,66 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            function updateCart(productId, quantity) {
+                $.ajax({
+                    url: '@Url.Action("UpdateCartProductQuantity", "CartProduct")',
+                    type: 'POST',
+                    data: {
+                        productId: productId,
+                        quantity: quantity
+                    },
+                    success: function (response) {
+                        location.reload(); // Reload the page to update the cart display
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            }
+
+            function updateTotalPrice() {
+                let totalPrice = 0;
+                $('#cart-items tr').each(function () {
+                    const price = parseFloat($(this).find('.item-total-price').text().substring(1));
+                    totalPrice += price;
+                });
+                $('#total-price').text('$' + totalPrice.toFixed(2));
+            }
+
+            $('.btn-plus').click(function () {
+                const row = $(this).closest('tr');
+                const productId = row.data('product-id');
+                const quantityInput = row.find('input[name="Quantity"]');
+                let quantity = parseInt(quantityInput.val());
+                quantity++;
+                quantityInput.val(quantity);
+                updateCart(productId, quantity);
+            });
+
+            $('.btn-minus').click(function () {
+                const row = $(this).closest('tr');
+                const productId = row.data('product-id');
+                const quantityInput = row.find('input[name="Quantity"]');
+                let quantity = parseInt(quantityInput.val());
+                if (quantity > 1) {
+                    quantity--;
+                    quantityInput.val(quantity);
+                    updateCart(productId, quantity);
+                }
+            });
+
+            $('.btn-delete').click(function () {
+                const row = $(this).closest('tr');
+                const productId = row.data('product-id');
+                updateCart(productId, 0); // Send 0 quantity to remove the item
+            });
+
+            updateTotalPrice();
+        });
+    </script>
+}
+

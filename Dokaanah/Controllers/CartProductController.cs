@@ -1,45 +1,40 @@
 ﻿using Dokaanah.Models;
-using Dokaanah.Repositories.RepoClasses;
 using Dokaanah.Repositories.RepoInterfaces;
 using Dokaanah.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using NuGet.Protocol.Core.Types;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Dokaanah.Controllers
 {
-    //CartProduct
     public class CartProductController : Controller
     {
         private readonly ICartProductRepo _cartproductRepo;
         private readonly IProductsRepo _productRepo;
-        private List<ShoppingCartitem> _cartitems;
+
         public CartProductController(ICartProductRepo cartproductRepo, IProductsRepo productsRepo)
         {
             _cartproductRepo = cartproductRepo;
             _productRepo = productsRepo;
-            _cartitems = new List<ShoppingCartitem>();
         }
-
 
         public IActionResult AddProductToCart(int Id)
         {
             var dbcontext = new Dokkanah2Contex();
-
-
             var prd = dbcontext.Products.FirstOrDefault(x => x.Id == Id);
 
-            var cartitems = HttpContext.Session.Get<List<ShoppingCartitem>>("Cart") ?? new List<ShoppingCartitem>();
+            var cartitems = HttpContext.Session.Get<List<ShoppingCartItem>>("Cart") ?? new List<ShoppingCartItem>();
 
-            var existingcartitem = _cartitems.FirstOrDefault(item => item.product.Id == Id);
+            var existingcartitem = cartitems.FirstOrDefault(item => item.Product.Id == Id);
             if (existingcartitem != null)
             {
                 existingcartitem.Quantity++;
             }
             else
             {
-                cartitems.Add(new ShoppingCartitem
+                cartitems.Add(new ShoppingCartItem
                 {
-                    product = prd,
+                    Product = prd,
                     Quantity = 1
                 });
             }
@@ -48,15 +43,15 @@ namespace Dokaanah.Controllers
         }
 
         [HttpGet]
-
-        public IActionResult ViewCart(int Quantity)
+        public IActionResult ViewCart()
         {
-            var cartitems = HttpContext.Session.Get<List<ShoppingCartitem>>("Cart").ToList(); // ?? new List<ShoppingCartitem>();
+            var cartitems = HttpContext.Session.Get<List<ShoppingCartItem>>("Cart") ?? new List<ShoppingCartItem>();
 
             var cartitemviewmodel = new shoppingCartViewModel
             {
-                CartItems = cartitems.Select(e => e.product).ToList(),
-                TotalPrice = cartitems.Sum(item => item.product.Price * item.Quantity)
+                CartItems = cartitems,
+                TotalPrice = cartitems.Sum(item => item.Product.Price * item.Quantity),
+                TotalQuantity = cartitems.Sum(item => item.Quantity)
             };
 
             return View(cartitemviewmodel);
@@ -64,113 +59,62 @@ namespace Dokaanah.Controllers
 
         public IActionResult Checkout()
         {
-            var cartitems = HttpContext.Session.Get<List<ShoppingCartitem>>("Cart").ToList(); // ?? new List<ShoppingCartitem>();
+            var cartitems = HttpContext.Session.Get<List<ShoppingCartItem>>("Cart") ?? new List<ShoppingCartItem>();
 
             var cartitemviewmodel = new shoppingCartViewModel
             {
-                CartItems = cartitems.Select(e => e.product).ToList(),
-                TotalPrice = cartitems.Sum(item => item.product.Price * item.Quantity)
+                CartItems = cartitems,
+                TotalPrice = cartitems.Sum(item => item.Product.Price * item.Quantity)
             };
             ViewBag.totalprice = cartitemviewmodel.TotalPrice;
             return View(cartitemviewmodel);
-
-        }
-
-        //List<Product> products = _productRepo.GetRandomProducts(5);
-        //try
-        //{
-        //    // Check if the product already exists in the cart
-        //    var existingCartItem = _cartproductRepo.GetCartItem(productId, cartId);
-        //    if (existingCartItem != null)
-        //    {
-        //        // If the product already exists, increment its quantity
-        //        existingCartItem.ProductItemsNumbers++;
-        //        _cartproductRepo.UpdateCartItem(existingCartItem);
-        //    }
-        //    else
-        //    {
-        //        // If the product does not exist, create a new cart item
-        //        var newCartItem = new Cart_Product
-        //        {
-        //            Prid = productId,
-        //            Caid = cartId,
-        //            ProductItemsNumbers = 1 // Set initial quantity to 1
-        //        };
-        //        _cartproductRepo.AddCartItem(newCartItem);
-        //    }
-
-        //    return RedirectToAction("Index", "Cart"); // Redirect to cart page or any other page
-        //}
-        //catch (Exception ex)
-        //{
-        //    // Handle exception
-        //    return StatusCode(500, "An error occurred while adding the product to the cart.");
-        //}
-
-        public IActionResult YourCart()
-        {
-            return View();
         }
 
         [HttpPost]
-        public IActionResult RemoveProductFromCart(int productId, int cartId)
+        public IActionResult RemoveProductFromCart(int productId)
         {
-            try
-            {
-                var cartItem = _cartproductRepo.GetCartItem(productId, cartId);
-                if (cartItem != null)
-                {
-                    _cartproductRepo.RemoveCartItem(cartItem);
-                }
+            var cartitems = HttpContext.Session.Get<List<ShoppingCartItem>>("Cart");
+            var itemToRemove = cartitems?.FirstOrDefault(item => item.Product.Id == productId);
 
-                return RedirectToAction("Index", "Cart"); // Redirect to cart page or any other page
-            }
-            catch (Exception ex)
+            if (itemToRemove != null)
             {
-                // Handle exception
-                return StatusCode(500, "An error occurred while removing the product from the cart.");
+                cartitems.Remove(itemToRemove);
+                HttpContext.Session.Set("Cart", cartitems);
             }
+
+            return RedirectToAction("ViewCart");
         }
 
         [HttpPost]
-        public IActionResult UpdateCartProductQuantity(int productId, int cartId, int quantity)
+        public IActionResult UpdateCartProductQuantity(int productId, int quantity)
         {
-            try
+            var cartitems = HttpContext.Session.Get<List<ShoppingCartItem>>("Cart");
+            var cartItem = cartitems?.FirstOrDefault(item => item.Product.Id == productId);
+
+            if (cartItem != null)
             {
-                var cartItem = _cartproductRepo.GetCartItem(productId, cartId);
-                if (cartItem != null)
+                if (quantity <= 0)
                 {
-                    cartItem.ProductItemsNumbers = quantity;
-                    _cartproductRepo.UpdateCartItem(cartItem);
+                    cartitems.Remove(cartItem);
                 }
+                else
+                {
+                    cartItem.Quantity = quantity;
+                }
+                HttpContext.Session.Set("Cart", cartitems);
+            }
 
-                return RedirectToAction("Index", "Cart"); // Redirect to cart page or any other page
-            }
-            catch (Exception ex)
-            {
-                // Handle exception
-                return StatusCode(500, "An error occurred while updating the cart product quantity.");
-            }
+            return Ok();
         }
-
 
         public IActionResult paymientAction()
         {
-            var cartitems = HttpContext.Session.Get<List<ShoppingCartitem>>("Cart").ToList(); // ?? new List<ShoppingCartitem>();
-
-            var cartitemviewmodel = new shoppingCartViewModel
-            {
-                CartItems = cartitems.Select(e => e.product).ToList(),
-                TotalPrice = cartitems.Sum(item => item.product.Price * item.Quantity)
-            };
-            ViewBag.totalprice = cartitemviewmodel.TotalPrice;
-            return View();
+            return View();  
         }
 
-
+        
         public IActionResult paymientsucces()
         {
-            
             return View();
         }
 

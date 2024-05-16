@@ -21,12 +21,12 @@
                                 <tr>
                                     <th scope="row">
                                         <div class="d-flex align-items-center mt-2">
-                                            <img src="@item.ImgUrl" class="img-fluid rounded-circle"
+                                            <img src="@item.Product.ImgUrl" class="img-fluid rounded-circle"
                                             style="width: 90px; height: 90px;" alt="product">
                                         </div>
                                     </th>
-                                    <td class="py-5">@item.Name</td>
-                                    <td class="py-5">$@item.Price</td>
+                                    <td class="py-5">@item.Product.Name</td>
+                                    <td class="py-5">$@item.Product.Price</td>
                                 </tr>
                             }
                         </tbody>
@@ -49,18 +49,18 @@
                         <label for="floatingFullName">Full Name</label>
                     </div>
 
-                    <div class="form-floating mb-3">
+                   @*  <div class="form-floating mb-3">
                         <input type="email" class="form-control" id="floatingEmail" placeholder="Email" required>
                         <label for="floatingEmail">Email</label>
-                    </div>
+                    </div> *@ 
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="floatingAddress" placeholder="Address" required>
                         <label for="floatingAddress">Address</label>
                     </div>
-                    <div class="form-floating mb-3">
+                   @*  <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="floatingCity" placeholder="City" required>
                         <label for="floatingCity">Governtment</label>
-                    </div>
+                    </div> *@
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="floatingState" placeholder="State" required>
                         <label for="floatingState">City</label>
