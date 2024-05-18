@@ -97,7 +97,7 @@ namespace Dokaanah.Controllers
             }
             ModelState.AddModelError(string.Empty, " email is already exist");
             //}
-            return View(models);
+            return RedirectToAction(nameof(HomeController.Index), "Home");
 
         }
 

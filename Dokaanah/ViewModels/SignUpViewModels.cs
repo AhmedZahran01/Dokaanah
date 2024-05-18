@@ -5,11 +5,13 @@ namespace Dokaanah.ViewModels
 {
 	public class SignUpViewModels
 	{
+		//[RegularExpression("[a-zA-Z0-9]")]
 		[Required(ErrorMessage = "User Name is Required")]
 		public string UserName { get; set; }
 
 		[Required(ErrorMessage ="Email is Required")]
 		[EmailAddress(ErrorMessage = " Invalid Email ")]
+		//[RegularExpression("^([\\w]*[\\w\\.]*(?!\\.)@gmail.com)")]
 		public string Email { get; set; }
 
 		[Required(ErrorMessage = "Password is Required")]

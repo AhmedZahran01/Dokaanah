@@ -18,7 +18,7 @@ namespace Dokaanah.Controllers
             _productRepo = productsRepo;
         }
 
-        public IActionResult AddProductToCart(int Id)
+        public IActionResult AddProductToCarttoshop(int Id)
         {
             var dbcontext = new Dokkanah2Contex();
             var prd = dbcontext.Products.FirstOrDefault(x => x.Id == Id);
@@ -39,9 +39,38 @@ namespace Dokaanah.Controllers
                 });
             }
             HttpContext.Session.Set("Cart", cartitems);
-            return RedirectToAction("ViewCart");
+            return RedirectToAction("shop","home");
         }
 
+
+        #region MyRegion
+
+        public IActionResult AddProductTocartbyHome(int Id)
+        {
+            var dbcontext = new Dokkanah2Contex();
+            var prd = dbcontext.Products.FirstOrDefault(x => x.Id == Id);
+
+            var cartitems = HttpContext.Session.Get<List<ShoppingCartItem>>("Cart") ?? new List<ShoppingCartItem>();
+
+            var existingcartitem = cartitems.FirstOrDefault(item => item.Product.Id == Id);
+            if (existingcartitem != null)
+            {
+                existingcartitem.Quantity++;
+            }
+            else
+            {
+                cartitems.Add(new ShoppingCartItem
+                {
+                    Product = prd,
+                    Quantity = 1
+                });
+            }
+            HttpContext.Session.Set("Cart", cartitems);
+            return RedirectToAction("index","home");
+        }
+
+
+        #endregion
         [HttpGet]
         
         public IActionResult ViewCart()

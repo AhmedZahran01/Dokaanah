@@ -58,10 +58,15 @@
                                     <a asp-controller="Product" asp-action="Details" asp-route-id="@prodCt.Id" class="btn-icon btn-eye-con">
                                         <i class="fa fa-eye"></i>
                                     </a>
-                                <a asp-controller="CartProduct" asp-action="AddProductToCart" asp-route-id="@prodCt.Id">
-                                    <span class="btn btn-dark w-100 mt-2 rounded-3 add-cart-btnnn">Add to cart</span>
+
+
+
+                                <a onclick="alert('Your item is add to your card')" asp-controller="CartProduct" asp-action="AddProductToCarttoshop" asp-route-id="@prodCt.Id" class="btn btn-dark w-100 mt-2
+                                                      rounded-3 add-cart-btnnn">
+
+                                    Add to cart
                                 </a>
-                                </div>
+                            </div>
                                 <div class="product-content position-relative">
                                     <h5 class="product-name text-uppercase fs-5 mt-3">
                                         <a asp-controller="Product" asp-action="Details" asp-route-id="@prodCt.Id">@prodCt.Name</a>

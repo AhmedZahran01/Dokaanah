@@ -57,7 +57,7 @@
                 magnam corrupti laudantium eligendi eum non, provident neque omnis perspiciatis consequuntur minima harum? Vel
                 commodi vero illum..
             </p>
-            <div class="input-group quantity-detail mb-5" style="width: 100px;">
+         @*    <div class="input-group quantity-detail mb-5" style="width: 100px;">
                 <div class="input-group-btn">
                     <button class="btn btn-sm btn-minus rounded-circle bg-light border">
                         <i class="fa fa-minus"></i>
@@ -69,12 +69,12 @@
                         <i class="fa fa-plus"></i>
                     </button>
                 </div>
-            </div>
-            <a asp-controller="CartProduct" asp-action="AddProductToCart" asp-route-id="@Model.Id" class="btn  btn-dark border  rounded-pill px-4 py-2 mb-4 add-cart-btnnn ">
+            </div> *@
+            <a onclick="alert('Your item is add to your card')" asp-controller="CartProduct" asp-action="AddProductToCarttoshop" asp-route-id="@Model.Id" class="btn  btn-dark border  rounded-pill px-4 py-2 mb-4 add-cart-btnnn ">
                 <i class="fa-solid fa-cart-plus add-cart-btnnn"></i>
                 Add to cart
             </a>
-            <a href="checkout.html" class="btn border btn-danger rounded-pill px-4 py-2 mb-4 "> Buy Now</a>
+            <a  class="btn border btn-danger rounded-pill px-4 py-2 mb-4 "> Buy Now</a>
         </div>
         <div class="col-lg-12">
             <nav>
